@@ -29,6 +29,8 @@ describe('Client with SourcesAndFindings V2', async () => {
     before(async () => {
         // Creates a new client.
         const client = new SecurityCenterClient();
+
+        const [projectId] = await client.getProjectId();
         const [source] = await client
             .createSource({
                 source: {
@@ -69,8 +71,6 @@ describe('Client with SourcesAndFindings V2', async () => {
         const [untouchedFinding] = await client
             .createFinding(createFindingTemplate)
             .catch(error => console.error(error));
-        
-        const [projectId] = await client.getProjectId();
         
         data = {
             orgId: organizationId,
@@ -123,6 +123,18 @@ describe('Client with SourcesAndFindings V2', async () => {
         const output = exec(`node v2/setUnmuteFinding.js ${data.orgId} ${data.sourceId} ${data.findingId}`);
         assert.match(output, new RegExp('UNMUTED'));
         assert.match(output, /Unmute a finding/);
+        assert.notMatch(output, /undefined/);
+    });
+
+    it('client can group all findings V2', () => {
+        const output = exec(`node v2/groupFindings.js ${data.orgId} ${data.sourceId}`);
+        assert.isAtLeast(4, output.match(/\n/g).length + 1);
+        assert.notMatch(output, /undefined/);
+    });
+
+    it('client group filtered findings V2', () => {
+        const output = exec(`node v2/groupFindingsWithFilter.js ${data.orgId} ${data.sourceId}`);
+        assert.isAtLeast(4, output.match(/\n/g).length + 1);
         assert.notMatch(output, /undefined/);
     });
 

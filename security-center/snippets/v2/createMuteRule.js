@@ -43,7 +43,7 @@ function main(organizationId, location = 'global') {
    */
   const muteConfigId = uuid.v4().replace(/-/g, '').substring(0, 20);
 
-  const name = parent+"/muteConfigs/"+muteConfigId;
+  const name = `${parent}/muteConfigs/${muteConfigId}`;
 
   // Build the muteRuleConfig object.
   const muteConfig = {
