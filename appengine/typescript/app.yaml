@@ -1,1 +1,4 @@
 runtime: nodejs16
+#vpc_access_connector:
+#  name: projects/ideta-backend-prod-345019/locations/europe-west1/connectors/connector
+#  egress_setting: all-traffic
